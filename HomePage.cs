@@ -1,30 +1,42 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.PageObjects;
+using OpenQA.Selenium.Support.UI;
 
-namespace Docler.POM.Pages
+namespace DoclerQaTask
 {
-    public class HomePage
-    {
-        private readonly IWebDriver driver;
 
-        public HomePage(IWebDriver Driver)
+    public class DoclerQaMainPage : DoclerQaBasePage
+    {
+        private readonly IWebDriver _driver;
+        private readonly By _defaultPageLocator = By.TagName("img");
+
+
+        private readonly string _url = @"http://uitest.duodecadits.com/";
+        public DoclerQaMainPage(IWebDriver browser) : base(browser)
         {
-            this.driver = Driver;
-            PageFactory.InitElements(Driver, this);
+            _driver = browser;
+            PageFactory.InitElements(browser, this);
         }
 
-        [FindsBy(How = How.XPath, Using = "/html/body/div/div[1]/h1")]
-        public IWebElement WelcomeMessage { get; set; }
+        public void Open()
+        {
+            _driver.Navigate().GoToUrl(_url);
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+            Func<IWebDriver, bool> waitForElement = web => web.FindElement(_defaultPageLocator).Displayed;
+            wait.Until(waitForElement);
+        }
 
-        [FindsBy(How = How.ClassName, Using = "lead")]
-        public IWebElement ExplanatoryText { get; set; }
+        public DoclerQaFormPage NavigateToForm()
+        {
+            PageMenu.FormButton.Click();
+            return new DoclerQaFormPage(_driver);
+        }
 
-        [FindsBy(How = How.Id, Using = "dh_logo")]
-        public IWebElement DHLogo { get; set; }
+        public String PTagText()
+        {
+            return PTag.Text;
+        }
+
     }
 }
