@@ -1,41 +1,47 @@
-using System;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
+using System;
+using OpenQA.Selenium.Support.PageObjects;
 
-namespace DoclerQaTask
+namespace DoclerHoldingAutomation.PageObjects
 {
-
-    public class DoclerQaMainPage : DoclerQaBasePage
+    class HomePage : DuodecaditsBasePage
     {
-        private readonly IWebDriver _driver;
-        private readonly By _defaultPageLocator = By.TagName("img");
+        
+        [FindsBy(How = How.Id, Using = "dh_logo")]
+        public IWebElement Logo { get; set; }
+        private PageUtils pageUtils = new PageUtils();
 
-
-        private readonly string _url = @"http://uitest.duodecadits.com/";
-        public DoclerQaMainPage(IWebDriver browser) : base(browser)
+        public HomePage(IWebDriver driver) :base(driver)
         {
-            _driver = browser;
-            PageFactory.InitElements(browser, this);
+            PageFactory.InitElements(driver, this);
+            
         }
 
-        public void Open()
+        public String GetTitle()
         {
-            _driver.Navigate().GoToUrl(_url);
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
-            Func<IWebDriver, bool> waitForElement = web => web.FindElement(_defaultPageLocator).Displayed;
-            wait.Until(waitForElement);
+            return this.driver.Title;
         }
 
-        public DoclerQaFormPage NavigateToForm()
+        public void WaitForPageLoad()
         {
-            PageMenu.FormButton.Click();
-            return new DoclerQaFormPage(_driver);
+            WebDriverWait wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(20));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("dh_logo")));
         }
 
-        public String PTagText()
+        public bool IsCompanyLogoPresent()
         {
-            return PTag.Text;
+            return pageUtils.IsElementPresent(this.driver, By.Id(("dh_logo")));
+        }
+
+        public string GetHomePageContentText()
+        {
+            return this.driver.FindElement(By.CssSelector(".lead")).Text;
+        }
+
+        public string GetHomePageHeaderText()
+        {
+            return this.driver.FindElement(By.CssSelector(".ui-test h1")).Text;
         }
 
     }
