@@ -1,6 +1,6 @@
 # homework_QA
 Test for Docler
-The exercise I solved with just few checks in Google, which was intentionally. I don't want to show you guys something which I don't know so this is why I have decided to do it this way. Nevertheless I'm eager to learn and start a career as an automation tester! I just need someone to give me the chance to prove that I'm worth it!
+The exercise I solved with just few checks in Google, which was intentionally. 
 
 Latest Chromedriver.exe (latest for the time of the upload) is attached inside of the solution.
 
